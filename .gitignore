@@ -1,0 +1,4 @@
+#seront ignorer dans le depot sur github 
+.env
+composer.lock
+vendor
