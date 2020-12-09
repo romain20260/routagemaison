@@ -1,39 +1,70 @@
 ****
-les namespaces et autoload avec composer
+Les namespaces et autoload avec composer
 <br>
-trois namespace a l'application (hors namespace des dependances tierce)
-il s'est charge en PSR-4 dans le fichier composer.json
-il s'agit de 
-App\ (le namespace vendor) contient les namespace des controller (dans le dossier controller)
-App\Entity (le namespace des entité dans le dossier model/entity) 
-App\ManagerEntity (le namespace des manager "DAL" qui ce charge du crud des entity)
+Trois namespace a l'application (hors namespace des dépendances tierce)
+Il s'est charge en PSR-4 dans le fichier composer. Json
+Il s'agit de 
+App\ (le namespace vendor) contient les namespace des Controller (dans le dossier Controller)
+App\Entity (le namespace des entités dans le dossier model/entity) 
+App\ManagerEntity (le namespace des manager "DAL" qui se charge du CRUD des entité)
 
-apres il y a aussi le namespace de la bibliotheque akibatech "ROUTEUR"
+Après il y a aussi le namespace de la bibliothèque akibatech "ROUTEUR", et aussi celui de dotenv et c’est dépendances
 
 ****
 htaccess
 <br> 
-redirection de la direction du fichier d "ecoute dans Public/index.php
-sinon configuration pour utilisation du router 
+Redirection dans Public/index.php
+Toutes les requêtes HTTP sont dirigées dans ce fichiers (office de frontcontroller) notre point d’entrée de l’application 
 ****
-constante Racine 
+Constante Racine 
 <br>
-dans le fichier index.php 
-creation d'une constant qui a pour valeur le nom du fichier englobant tout le contenue du projet 
-du coup le changeant du nom du dossier n affecteras as l application 
-****
-pas d'utilisation de moteur de template ou autre en front juste des include de syntaxe html 
-voir fichier dans view/blocTemplate (pour les bloc)
-****
-niveau DAL 
-managerParent est le parent des manager il fait heriter la connexion a la DB (PDO)
-puis a chaque entity presente en DB un manager qui lui est allouer pour effectuer les tache du CRUD (DAL "dat layer abstract")
-****
-le requetes sont envoyer a index.php qui ecoute et dispatche celon la routecollection trigger 
-. declenchement de methode adequate du controller en charge de gerer la route
+Dans le fichier index.php 
+Création d'une constant qui a pour valeur le nom du fichier englobant toute l’application (simulacre du root de l’application)
+FRONT_END
+Pas d'utilisation de moteur de Template ou autre en front juste des include de syntaxe html 
+Voir fichier dans vue/blocTemplate (pour les blocs)
+.gitignore
+Contient les fichiers ignore par git 
 
-url->trigger"route"->declenche la methode allouer
+La bibliothèque DOTENV
+Bibliothèque qui permet de définir un .env pour les variable d’environnement 
+
+.env (doit contenir) :
+
+#################
+connection DATABASE
+
+HOST = "?????"
+DBNAME = "????"
+USERNAME = " ????"
+PASSWORD = "????"
+#################
+Permettant la connexion a la DB lors de la création d’instance PDO
+
+DAL (Data Access Layer)
+Nous détachons la responsabilité du CRUD des model utilisable pour la vue.
+Nous créons pour chaque entité présente en Data Base une entités manager qui aura pour rôle de gérer le CRUD.
+Une class abstract Manager Parent lui aura pour rôle de disposer à l’entité manager (ManagerEntity) la connexion a la Data Base via un objets PDO.
+
+
 ****
-les methode des controller ce charge du metier avec l'utilisation des model (entity,entitymanager ou effenctuellement d'autres)
-puis renvoie une vue ou pas 
+La bibliothèque akibatech/routeur a pour rôle de routeur chaque requete HTPP vers la méthode du Controller lui étant assignée.
+
+Router->verbeHTTP (URL,callable) ;
+
+La liste complète de toutes les routes que nous créons et acquis par la route dans un Array 
+(Ce que l’on appelle communément une route-collection)
+
+Par le mécanisme :
+
+Une requete HTTP = une adresse URL
+Si l’adresse match avec notre collection de route nous le router cette charge de déclencher la callable 
+
+****
+Les méthodes des Controllers
+<br>
+
+Il se charge du métier avec l'utilisation des model (entité, entitymanager ou éventuellement d'autres).
+C’est le cerveau de notre application, il s’occupe de faire les processus, le métier pour obtenir le résultat attendu par la route, il as pour cela acess à des model (entité, manager etc…) pour faire ce métier.
+
 ****
